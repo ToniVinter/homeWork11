@@ -1,25 +1,28 @@
 package Students;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType;
+
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class ReadStudents {
-    public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("grade.txt");
-        List<Student> student = new ArrayList<>();
-        Student studentTemp = new Student("Ana",10,"Mate");
-        Scanner scanner = new Scanner(file);
-        scanner.useDelimiter(" ");
+    public List<StudentGrade> readFile(String fileLocation) throws Exception{
+        List<StudentGrade> students = new ArrayList<StudentGrade>();
+        Scanner scanner = new Scanner(new File(fileLocation));
+        scanner.nextLine();
         while(scanner.hasNextLine()){
-
-            studentTemp.setName(scanner.next() + " " +scanner.next());
-            studentTemp.setDiscipline(scanner.next());
-            studentTemp.setGrade(scanner.next());
-            System.out.println(studentTemp + "\n");
-
+            StudentGrade studentGrade = fetchStudentGrade(scanner.nextLine());
+            students.add(studentGrade);
         }
+        return students;
+    }
+
+    private StudentGrade fetchStudentGrade(String line) {
+        String[] tokens = line.split("\\|");
+        return  new StudentGrade(tokens[0],tokens[1],Integer.parseInt(tokens[2]));
     }
 }
+
